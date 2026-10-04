@@ -140,6 +140,98 @@
 
     </section>
 
+    <!-- AI COACH -->
+<section class="card ai-coach">
+
+  <div class="ai-coach-header">
+
+    <div>
+      <small>🤖 AI POWERED BY GEMMA</small>
+
+      <h2>
+        AI Coach
+      </h2>
+
+      <p class="subtext">
+        Feeling overwhelmed? Tell NextStep what's going on.
+        AI Coach will turn it into three simple next steps.
+      </p>
+    </div>
+
+  </div>
+
+
+  <textarea
+    id="aiCoachInput"
+    class="ai-coach-input"
+    placeholder="e.g. I have an exam tomorrow and five chapters left. I don't know where to start..."
+    maxlength="2000"
+  ></textarea>
+
+
+  <div class="row">
+
+    <button
+      id="aiCoachButton"
+      class="primary"
+      onclick="getAICoach()"
+    >
+      ✨ Find My Next Steps
+    </button>
+
+    <button
+      class="secondary"
+      onclick="clearAICoach()"
+    >
+      Clear
+    </button>
+
+  </div>
+
+
+  <div
+    id="aiCoachLoading"
+    class="ai-coach-loading hidden"
+  >
+    🧠 Thinking about your next steps...
+  </div>
+
+
+  <div
+    id="aiCoachError"
+    class="message hidden"
+  ></div>
+
+
+  <div
+    id="aiCoachResults"
+    class="ai-coach-results hidden"
+  >
+
+    <div class="breakdown-header">
+
+      <div>
+        <small>YOUR NEXT STEPS</small>
+
+        <h2>
+          Start small. Keep moving.
+        </h2>
+      </div>
+
+    </div>
+
+
+    <div
+      id="aiCoachSteps"
+      class="steps"
+    ></div>
+
+  </div>
+
+</section>
+
+
+
 
     <!-- STATS -->
     <section class="dashboard">

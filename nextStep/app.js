@@ -1111,3 +1111,393 @@ function escapeHTML(text) {
 
     return div.innerHTML;
 }
+
+// ==========================================
+// AI COACH - GEMMA
+// ==========================================
+
+let latestAICoachSteps = [];
+
+
+// ==========================================
+// GET AI COACH RESPONSE
+// ==========================================
+
+async function getAICoach() {
+
+    const input =
+        document.getElementById("aiCoachInput");
+
+    const button =
+        document.getElementById("aiCoachButton");
+
+    const loading =
+        document.getElementById("aiCoachLoading");
+
+    const error =
+        document.getElementById("aiCoachError");
+
+    const results =
+        document.getElementById("aiCoachResults");
+
+    const stepsContainer =
+        document.getElementById("aiCoachSteps");
+
+
+    if (!input) {
+        return;
+    }
+
+
+    const situation =
+        input.value.trim();
+
+
+    if (!situation) {
+
+        showAICoachError(
+            "Tell me what's on your mind first."
+        );
+
+        return;
+    }
+
+
+    if (situation.length < 5) {
+
+        showAICoachError(
+            "Give me a little more detail so I can help."
+        );
+
+        return;
+    }
+
+
+    // Reset UI
+    error.classList.add("hidden");
+    results.classList.add("hidden");
+    loading.classList.remove("hidden");
+
+    button.disabled = true;
+    button.textContent = "🧠 Thinking...";
+
+
+    try {
+
+        const response =
+            await fetch("/api/coach", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    situation: situation
+                })
+            });
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "AI Coach could not respond."
+            );
+
+        }
+
+
+        if (
+            !data.steps ||
+            !Array.isArray(data.steps)
+        ) {
+
+            throw new Error(
+                "AI Coach returned an invalid response."
+            );
+
+        }
+
+
+        latestAICoachSteps =
+            data.steps.slice(0, 3);
+
+
+        renderAICoachSteps(
+            latestAICoachSteps
+        );
+
+
+        results.classList.remove(
+            "hidden"
+        );
+
+
+    } catch (err) {
+
+        console.error(
+            "AI Coach error:",
+            err
+        );
+
+
+        showAICoachError(
+            err.message ||
+            "Something went wrong. Please try again."
+        );
+
+
+    } finally {
+
+        loading.classList.add(
+            "hidden"
+        );
+
+        button.disabled = false;
+
+        button.textContent =
+            "✨ Find My Next Steps";
+    }
+}
+
+
+// ==========================================
+// RENDER AI STEPS
+// ==========================================
+
+function renderAICoachSteps(steps) {
+
+    const container =
+        document.getElementById("aiCoachSteps");
+
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    steps.forEach(function (step, index) {
+
+        const stepElement =
+            document.createElement("div");
+
+
+        stepElement.className =
+            "ai-coach-step";
+
+
+        const number =
+            document.createElement("div");
+
+
+        number.className =
+            "step-number";
+
+
+        number.textContent =
+            index + 1;
+
+
+        const text =
+            document.createElement("div");
+
+
+        text.className =
+            "step-text";
+
+
+        text.textContent =
+            step;
+
+
+        const addButton =
+            document.createElement("button");
+
+
+        addButton.className =
+            "secondary small-button";
+
+
+        addButton.textContent =
+            "+ Add Task";
+
+
+        addButton.onclick =
+            function () {
+
+                addAICoachTask(
+                    step,
+                    addButton
+                );
+
+            };
+
+
+        stepElement.appendChild(
+            number
+        );
+
+        stepElement.appendChild(
+            text
+        );
+
+        stepElement.appendChild(
+            addButton
+        );
+
+
+        container.appendChild(
+            stepElement
+        );
+
+    });
+}
+
+
+// ==========================================
+// ADD AI STEP TO TASKS
+// ==========================================
+
+function addAICoachTask(
+    stepText,
+    button
+) {
+
+    const newTask = {
+
+        id:
+            Date.now() +
+            Math.random(),
+
+        text:
+            stepText,
+
+        importance:
+            "medium",
+
+        timing:
+            "now",
+
+        completed:
+            false,
+
+        createdAt:
+            new Date().toISOString()
+    };
+
+
+    tasks.unshift(
+        newTask
+    );
+
+
+    saveData();
+
+    renderTasks();
+
+    updateStats();
+
+    updateOverallProgress();
+
+
+    if (button) {
+
+        button.textContent =
+            "✓ Added";
+
+        button.disabled =
+            true;
+
+    }
+
+
+    showDumpMessage(
+        "AI step added to NextStep ✓",
+        false
+    );
+}
+
+
+// ==========================================
+// AI COACH ERROR
+// ==========================================
+
+function showAICoachError(
+    message
+) {
+
+    const error =
+        document.getElementById(
+            "aiCoachError"
+        );
+
+
+    if (!error) {
+        return;
+    }
+
+
+    error.textContent =
+        message;
+
+
+    error.classList.remove(
+        "hidden"
+    );
+}
+
+
+// ==========================================
+// CLEAR AI COACH
+// ==========================================
+
+function clearAICoach() {
+
+    const input =
+        document.getElementById(
+            "aiCoachInput"
+        );
+
+
+    const results =
+        document.getElementById(
+            "aiCoachResults"
+        );
+
+
+    const error =
+        document.getElementById(
+            "aiCoachError"
+        );
+
+
+    if (input) {
+        input.value = "";
+    }
+
+
+    if (results) {
+        results.classList.add(
+            "hidden"
+        );
+    }
+
+
+    if (error) {
+        error.classList.add(
+            "hidden"
+        );
+    }
+
+
+    latestAICoachSteps = [];
+}
