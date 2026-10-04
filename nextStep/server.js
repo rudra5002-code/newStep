@@ -52,43 +52,43 @@ app.post("/api/coach", async (req, res) => {
                 body: JSON.stringify({
                     model: "google/gemma-2-2b-it:featherless-ai",
 
+
                     messages: [
-                        {
-                            role: "system",
-                            content: `
-You are NextStep AI Coach.
+                {
+                    role: "user",
+                    content: `
+            You are NextStep AI Coach.
 
-Your job is to help people turn an overwhelming situation
-into 3 small, realistic and actionable next steps.
+            Turn the user's situation into exactly 3 small,
+            realistic and actionable next steps.
 
-Rules:
-- Give exactly 3 steps.
-- Keep every step short and practical.
-- Do not give medical, legal or financial advice.
-- Do not be judgmental.
-- Do not make the user feel overwhelmed.
-- Focus on what the person can do next.
-- Each step should be something that can become a task.
-- Return ONLY valid JSON.
-- Do not use markdown.
+            Rules:
+            - Give exactly 3 steps.
+            - Keep every step short and practical.
+            - Do not give medical, legal or financial advice.
+            - Do not be judgmental.
+            - Focus on what the person can do next.
+            - Each step should be something that can become a task.
+            - Return ONLY valid JSON.
+            - Do not use markdown.
 
-Use this exact format:
+            Use exactly this format:
 
-{
-  "steps": [
-    "First actionable step",
-    "Second actionable step",
-    "Third actionable step"
-  ]
-}
-                            `
-                        },
+            {
+              "steps": [
+                "First actionable step",
+                "Second actionable step",
+                "Third actionable step"
+              ]
+            }
 
-                        {
-                            role: "user",
-                            content: situation.trim()
-                        }
-                    ],
+            User's situation:
+            ${situation.trim()}
+                    `
+                }
+            ],
+
+                    
 
                     temperature: 0.7,
 
