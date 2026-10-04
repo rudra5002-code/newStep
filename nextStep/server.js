@@ -50,7 +50,7 @@ app.post("/api/coach", async (req, res) => {
                 },
 
                 body: JSON.stringify({
-                    model: "google/gemma-2-2b-it",
+                    model: "google/gemma-2-2b-it:featherless-ai",
 
                     messages: [
                         {
