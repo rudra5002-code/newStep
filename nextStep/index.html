@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NextStep — Clear Your Mind</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+
+    <div class="logo">
+      🧠 Next<span>Step</span>
+    </div>
+
+    <div class="xp-box">
+      ⭐ <span id="xp">0</span> 
+    </div>
+
+  </header>
+
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+
+      <h1>
+        Clear your mind.<br>
+        <span>Find your next step.</span>
+      </h1>
+
+      <p>
+        Put everything on your mind in one place.
+        NextStep helps you organize what matters
+        and take one step at a time.
+      </p>
+
+    </section>
+
+
+    <!-- CAPTURE THOUGHTS -->
+    <section class="card">
+
+      <h2>🧠 Capture Your Thoughts</h2>
+
+      <p class="subtext">
+        What's on your mind?
+      </p>
+
+      <textarea
+        id="dumpInput"
+        placeholder="e.g. Finish presentation, call mom, clean my room..."
+      ></textarea>
+
+
+      <!-- IMPORTANCE + TIMING -->
+      <div class="task-options">
+
+        <div>
+
+          <label for="importanceSelect">
+            Importance
+          </label>
+
+          <select id="importanceSelect">
+
+            <option value="high">
+              🔴 High
+            </option>
+
+            <option value="medium" selected>
+              🟡 Medium
+            </option>
+
+            <option value="low">
+              🟢 Low
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label for="timingSelect">
+            When?
+          </label>
+
+          <select id="timingSelect">
+
+            <option value="now">
+              ⚡ Do it now
+            </option>
+
+            <option value="later">
+              🌤 Later today
+            </option>
+
+            <option value="someday">
+              📅 Someday
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="row">
+
+        <button
+          class="primary"
+          onclick="processDump()"
+        >
+          ✨ Add to NextStep
+        </button>
+
+        <button
+          class="secondary"
+          onclick="clearDump()"
+        >
+          Clear
+        </button>
+
+      </div>
+
+
+      <div
+        id="dumpMessage"
+        class="message"
+      ></div>
+
+    </section>
+
+
+    <!-- STATS -->
+    <section class="dashboard">
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="totalTasks"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Total Tasks
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="completedTasks"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Completed
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="focusMinutes"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Focus Minutes
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="streak"
+        >
+          1
+        </div>
+
+        <div class="stat-label">
+          Day Streak
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- TASK LIST -->
+    <section class="task-section">
+
+      <div class="section-title">
+
+        <h2>
+          📋 Your Tasks
+        </h2>
+
+        <button
+          class="danger small-button"
+          onclick="clearTasks()"
+        >
+          Clear All
+        </button>
+
+      </div>
+
+
+      <div id="taskList"></div>
+
+    </section>
+
+
+    <!-- FOCUS MODE -->
+    <section class="card focus">
+
+      <h2>
+        🎯 Focus Mode
+      </h2>
+
+      <p class="subtext">
+        One task. 25 minutes. No distractions.
+      </p>
+
+
+      <div
+        id="focusTaskName"
+        class="focus-task-name"
+      >
+        No task selected
+      </div>
+
+
+      <div
+        id="timer"
+        class="timer"
+      >
+        25:00
+      </div>
+
+
+      <div class="progress-container">
+
+        <div
+          id="focusProgressBar"
+          class="progress-bar"
+        ></div>
+
+      </div>
+
+
+      <div class="row center-row">
+
+        <button
+          id="timerButton"
+          class="primary"
+          onclick="toggleTimer()"
+        >
+          Start
+        </button>
+
+
+        <button
+          class="secondary"
+          onclick="resetTimer()"
+        >
+          Reset
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- PROGRESS -->
+    <section class="card">
+
+      <h2>
+        📈 Your Progress
+      </h2>
+
+      <p class="subtext">
+        Small actions add up.
+      </p>
+
+
+      <div class="progress-summary">
+
+        <div>
+
+          <strong id="progressPercentage">
+            0%
+          </strong>
+
+          <span>
+            completed
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <strong id="progressXP">
+            0 XP
+          </strong>
+
+          <span>
+            earned
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="progress-container">
+
+        <div
+          id="overallProgressBar"
+          class="progress-bar"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- END OF DAY -->
+    <section class="card end-day">
+
+      <h2>
+        🌙 End of Day
+      </h2>
+
+      <p class="subtext">
+        You don't need to finish everything.
+        Notice what you moved forward.
+      </p>
+
+
+      <button
+        class="primary"
+        onclick="endDay()"
+      >
+        🌟 Finish My Day
+      </button>
+
+
+      <div
+        id="endDayMessage"
+        class="message"
+      ></div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    Built with 🧠 + ❤️ for a clearer next step.
+  </footer>
+
+
+  <script src="app.js"></script>
+
+</body>
+</html>
+index.html
+HTML
